@@ -35,7 +35,6 @@ var getProperty = function (quantity) {
 };
 getProperty(25);
 var pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
-var pictures = document.querySelector('.pictures');
 var renderElements = function (pictureItemTemplate) {
   var fragment = document.createDocumentFragment();
   var createPropertiesTemplate = function (data) {
@@ -51,7 +50,7 @@ var renderElements = function (pictureItemTemplate) {
     var newElementPicture = createPropertiesTemplate(photoDescription[j]);
     fragment.appendChild(newElementPicture);
   }
-  pictures.appendChild(fragment);
+  pictureItemTemplate.appendChild(fragment);
 };
-var pictureItemTemplate = document.querySelector('.picture');
-renderElements(pictureItemTemplate);
+var pictures = document.querySelector('.pictures');
+renderElements(pictures);
