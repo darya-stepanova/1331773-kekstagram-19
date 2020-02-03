@@ -1,51 +1,57 @@
 'use strict';
 var photoDescription = [];
-var textsForComment = ['Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.'];
+var textsForComment = [
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Всё отлично!', 'В целом всё неплохо. Но не всё.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+];
 var NamesForComment = ['Денис', 'Виктория', 'Алина', 'Кузьма', 'Альбина', 'Макар', 'Павел', 'Адольф', 'Христофор', 'Василий', 'Аксинья', 'Арсен', 'Зарина', 'Всеволод'];
-var random = function random(min, max) {
+var getRandomNumber = function (min, max) {
   return Math.round(min + Math.random() * (max - min));
 };
-
-var picture = document.getElementById('picture');
-var fragment = document.createDocumentFragment();
-var propertyCreation = function (quantity) {
+var createComments = function () {
+  var comments = [];
+  for (var k = 0; k < getRandomNumber(1, textsForComment.length); k++) {
+    comments[k] = {
+      avatar: 'img/avatar-' + getRandomNumber(1, 6) + '.svg',
+      massage: textsForComment[getRandomNumber(0, textsForComment.length)],
+      name: NamesForComment[getRandomNumber(1, NamesForComment.length)]
+    };
+  }
+  return comments;
+};
+var getProperty = function (quantity) {
   for (var i = 1; i <= quantity; i++) {
     var photoDescriptionItem = {
       url: 'photos/' + i + '.jpg',
       description: ' ',
-      likes: random(15, 200),
-      comments: {
-        avatar: 'img/avatar-' + random(1, 6) + '.svg',
-        massage: textsForComment[i % 2],
-        name: NamesForComment[random(1, NamesForComment.length)]
-      }
+      likes: getRandomNumber(15, 200),
+      comments: createComments()
     };
     photoDescription.push(photoDescriptionItem);
-    var pictureItem = document.createElement('a');
-    pictureItem.classList.add('picture');
-    fragment.appendChild(pictureItem);
   }
-  picture.appendChild(fragment);
 };
-propertyCreation(25);
-var pictureSelector = document.querySelectorAll('.picture');
-for (var j = 0; j < pictureSelector.length; j++) {
-  var child = '.picture' + ':nth-child(' + (j + 1) + ')';
-  var pictureSelectorItem = document.querySelector(child);
-  var pictureImg = document.createElement('img');
-  pictureSelectorItem.appendChild(pictureImg);
-  pictureImg.classList.add('picture__img');
-  pictureImg.src = photoDescription[j].url;
-  var pictureInfo = document.createElement('p');
-  pictureSelectorItem.appendChild(pictureInfo);
-  pictureInfo.classList.add('picture__info');
-  var pictureComments = document.createElement('span');
-  pictureInfo.appendChild(pictureComments);
-  pictureComments.classList.add('picture__comments');
-  pictureComments.textContent = textsForComment.length - 1;
-  var pictureLikes = document.createElement('span');
-  pictureInfo.appendChild(pictureLikes);
-  pictureLikes.classList.add('picture__likes');
-  pictureLikes.textContent = photoDescription[j].likes;
-}
-
+getProperty(25);
+var pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
+var pictures = document.querySelector('.pictures');
+var renderElements = function (pictureItemTemplate) {
+  var fragment = document.createDocumentFragment();
+  var createPropertiesTemplate = function (data) {
+    var pictureItem = pictureTemplateElement.cloneNode(true);
+    pictureItem.querySelector('.picture__img').src = data.url;
+    pictureItem.querySelector('.picture__img').alt = data.description;
+    pictureItem.querySelector('.picture__comments').textContent = data.comments.length;
+    pictureItem.querySelector('.picture__likes').textContent = data.likes;
+    return pictureItem;
+  };
+  for (var j = 0; j < photoDescription.length; j++) {
+    createPropertiesTemplate(photoDescription[j]);
+    var newElementPicture = createPropertiesTemplate(photoDescription[j]);
+    fragment.appendChild(newElementPicture);
+  }
+  pictures.appendChild(fragment);
+};
+var pictureItemTemplate = document.querySelector('.picture');
+renderElements(pictureItemTemplate);
