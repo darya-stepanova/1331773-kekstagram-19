@@ -67,7 +67,6 @@ var imgUploadWrapper = formUpload.querySelector('.img-upload__preview');
 var imgUpload = imgUploadWrapper.querySelector('img');
 var effectLevelLine = formUpload.querySelector('.effect-level__line');
 var effectPinDepth = formUpload.querySelector('.effect-level__depth');
-var widthEffectLevel = effectLevelLine.offsetWidth;
 var effectLevel = formUpload.querySelector('.effect-level');
 effectLevel.style.display = 'none';
 var popupBodyEscPressHandler = function (evt) {
@@ -155,6 +154,7 @@ effectPin.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
     var coordinatesPin = (effectPin.offsetLeft - shift.x);
+    var widthEffectLevel = effectLevelLine.offsetWidth;
     effectValue.value = coordinatesPin / widthEffectLevel;
     getValueFilter(effectValue.value);
     if (coordinatesPin > 0 && coordinatesPin <= widthEffectLevel) {
