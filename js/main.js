@@ -84,6 +84,7 @@ var closePopupBody = function () {
   uploadFile.value = '';
   imgUpload.className = '';
   effectLevel.style.display = 'none';
+  imgUpload.style.filter = '';
 };
 
 uploadFile.addEventListener('change', openPopupBody);
@@ -204,8 +205,8 @@ hashtags.addEventListener('change', function () {
   };
   var checkRepeat = function (currenItemHashtags) {
     for (var j = 0; j < arrHashtags.length; j++) {
-      currenItemHashtags.toLowerCase();
-      if (j !== i && currenItemHashtags === arrHashtags[j]) {
+      var itemHashtagsLowerCase = currenItemHashtags.toLowerCase();
+      if (j !== i && itemHashtagsLowerCase === arrHashtags[j]) {
         hashtags.setCustomValidity('один и тот же хэш-тег не может быть использован дважды;');
         break;
       }
