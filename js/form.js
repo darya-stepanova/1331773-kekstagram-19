@@ -112,61 +112,7 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
-
-  hashtags.addEventListener('change', function () {
-    var valueHashtags = hashtags.value;
-    var arrHashtags = valueHashtags.split(' ');
-    var pattern = /^[A-Za-zА-Яа-яЁё0-9_]+$/;
-    hashtags.setCustomValidity('');
-    var checkFirstLetter = function (currenItemHashtags) {
-      if (currenItemHashtags[0] !== '#') {
-        hashtags.setCustomValidity('хэш-тег должен начинаться с символа #');
-      }
-    };
-    var checkLengthItem = function (currenItemHashtags) {
-      if (currenItemHashtags.length === 1) {
-        hashtags.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-      }
-    };
-    var checkLengthTotal = function (currenItemHashtags) {
-      if (currenItemHashtags.length > 20) {
-        hashtags.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку;');
-      }
-    };
-    var checkSeparation = function (currenItemHashtags) {
-      if (currenItemHashtags.substr(1, currenItemHashtags.length - 1).indexOf('#') > -1) {
-        hashtags.setCustomValidity('хэш-теги должны разделяться пробелами');
-      }
-    };
-    var checkSymbol = function (currenItemHashtags) {
-      if (!pattern.test(currenItemHashtags.substr(1, currenItemHashtags.length - 1))) {
-        hashtags.setCustomValidity('не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи ');
-      }
-    };
-    var checkRepeat = function (currenItemHashtags) {
-      for (var j = 0; j < arrHashtags.length; j++) {
-        var itemHashtagsLowerCase = currenItemHashtags.toLowerCase();
-        if (j !== i && itemHashtagsLowerCase === arrHashtags[j]) {
-          hashtags.setCustomValidity('один и тот же хэш-тег не может быть использован дважды;');
-          break;
-        }
-      }
-    };
-    var checkQuantity = function () {
-      if (arrHashtags.length > 5) {
-        hashtags.setCustomValidity('нельзя указать больше пяти хэш-тегов;');
-      }
-    };
-    for (var i = 0; i < arrHashtags.length; i++) {
-      var itemHashtags = arrHashtags[i];
-      checkFirstLetter(itemHashtags);
-      checkSymbol(itemHashtags);
-      checkLengthItem(itemHashtags);
-      checkSeparation(itemHashtags);
-      checkRepeat(itemHashtags);
-      checkLengthTotal(itemHashtags);
-    }
-    checkQuantity();
-  });
+  window.form = {
+    hashtags: hashtags
+  };
 })();
