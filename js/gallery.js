@@ -1,26 +1,26 @@
 'use strict';
 (function () {
   var pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
-  var successHandler = function (images) {
-    var renderElements = function (pictureItemTemplate) {
-      var fragment = document.createDocumentFragment();
-      var createPropertiesTemplate = function (data) {
-        var pictureItem = pictureTemplateElement.cloneNode(true);
-        pictureItem.querySelector('.picture__img').src = data.url;
-        pictureItem.querySelector('.picture__img').alt = data.description;
-        pictureItem.querySelector('.picture__comments').textContent = data.comments.length;
-        pictureItem.querySelector('.picture__likes').textContent = data.likes;
-        return pictureItem;
-      };
-      for (var j = 0; j < images.length; j++) {
-        createPropertiesTemplate(images[j]);
-        var newElementPicture = createPropertiesTemplate(images[j]);
-        fragment.appendChild(newElementPicture);
-      }
-      pictureItemTemplate.appendChild(fragment);
+  var pictures = document.querySelector('.pictures');
+  window.renderElements = function (images, pictureItemTemplate) {
+    var fragment = document.createDocumentFragment();
+    var createPropertiesTemplate = function (data) {
+      var pictureItem = pictureTemplateElement.cloneNode(true);
+      pictureItem.querySelector('.picture__img').src = data.url;
+      pictureItem.querySelector('.picture__img').alt = data.description;
+      pictureItem.querySelector('.picture__comments').textContent = data.comments.length;
+      pictureItem.querySelector('.picture__likes').textContent = data.likes;
+      return pictureItem;
     };
-    var pictures = document.querySelector('.pictures');
-    renderElements(pictures);
+    for (var j = 0; j < images.length; j++) {
+      createPropertiesTemplate(images[j]);
+      var newElementPicture = createPropertiesTemplate(images[j]);
+      fragment.appendChild(newElementPicture);
+    }
+    pictureItemTemplate.appendChild(fragment);
+  };
+  var successHandler = function (images) {
+    window.renderElements(images, pictures);
   };
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
@@ -34,4 +34,7 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
   window.load(successHandler, errorHandler);
+  window.pictures = {
+    pictures: pictures
+  };
 })();
