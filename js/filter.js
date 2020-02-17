@@ -11,7 +11,6 @@
   var filterChooseHandler = function (filterName) {
     filter.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
     filterName.classList.add('img-filters__button--active');
-
   };
   filterDefault.addEventListener('click', function (evt) {
     evt.preventDefault();
@@ -23,12 +22,12 @@
 
   filterRandom.addEventListener('click', function (evt) {
     evt.preventDefault();
-    picruresData = window.data.get().slice();
     filterChooseHandler(filterRandom);
-    var dataRandom = picruresData.sort(function () {
-      return 0.5 - Math.random();
-    });
     window.debounce(function () {
+      picruresData = window.data.get().slice();
+      var dataRandom = picruresData.sort(function () {
+        return 0.5 - Math.random();
+      });
       window.gallery.remove();
       window.gallery.renderElements(dataRandom, window.gallery.pictures);
     });
@@ -36,12 +35,14 @@
 
   filterDiscussed.addEventListener('click', function (evt) {
     evt.preventDefault();
-    picruresData = window.data.get().slice();
     filterChooseHandler(filterDiscussed);
-    window.gallery.remove();
-    var dataDiscussed = picruresData.sort(function (a, b) {
-      return b.comments.length - a.comments.length;
+    window.debounce(function () {
+      picruresData = window.data.get().slice();
+      window.gallery.remove();
+      var dataDiscussed = picruresData.sort(function (a, b) {
+        return b.comments.length - a.comments.length;
+      });
+      window.gallery.renderElements(dataDiscussed, window.gallery.pictures);
     });
-    window.gallery.renderElements(dataDiscussed, window.gallery.pictures);
   });
 })();
