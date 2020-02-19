@@ -23,6 +23,7 @@
     renderElements(images, pictures);
     window.showFilter();
     window.data.save(images);
+    window.showPreviewPicture();
   };
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
