@@ -9,6 +9,8 @@
   var countComments = picturePreviewContainer.querySelector('.social__comment-count');
   var loaderComments = picturePreviewContainer.querySelector('.comments-loader');
   var pictureDescription = picturePreviewContainer.querySelector('.social__caption');
+  var WIDTH_COMMENTS_IMG = 35;
+  var HEIGHT_COMMENTS_IMG = 35;
   comments.innerHTML = '';
 
   window.showPreviewPicture = function () {
@@ -35,8 +37,8 @@
       comments.appendChild(comment);
       comment.appendChild(commentImg);
       comment.appendChild(commentText);
-      commentImg.width = 35;
-      commentImg.height = 35;
+      commentImg.width = WIDTH_COMMENTS_IMG;
+      commentImg.height = HEIGHT_COMMENTS_IMG;
     }
   };
 })();
