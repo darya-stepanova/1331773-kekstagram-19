@@ -170,4 +170,9 @@
     }
     checkQuantity();
   });
+  commentsTextarea.addEventListener('invalid', function () {
+    if (commentsTextarea.validity.tooLong) {
+      commentsTextarea.setCustomValidity('Длина комментария не может составлять больше 140 символов');
+    }
+  });
 })();

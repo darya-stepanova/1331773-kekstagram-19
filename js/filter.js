@@ -11,10 +11,14 @@
   var showPopupImg = function (evt) {
     window.preview.createPopupImg(evt, picturesData);
   };
+  var keydownShowPopupImg = function (evt) {
+    window.preview.keydownCreatePopupImg(evt, picturesData);
+  };
   var filterChooseHandler = function (filterName) {
     filter.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
     filterName.classList.add('img-filters__button--active');
     window.gallery.pictures.removeEventListener('click', window.preview.showPopupImg);
+    window.gallery.pictures.removeEventListener('keydown', window.preview.keydownShowPopupImg);
   };
   filterDefault.addEventListener('click', function (evt) {
     evt.preventDefault();
@@ -23,6 +27,7 @@
     window.gallery.remove();
     window.gallery.renderElements(picturesData, window.gallery.pictures);
     window.gallery.pictures.addEventListener('click', showPopupImg);
+    window.gallery.pictures.addEventListener('keydown', keydownShowPopupImg);
   });
 
   filterRandom.addEventListener('click', function (evt) {
@@ -36,6 +41,7 @@
       window.gallery.remove();
       window.gallery.renderElements(dataRandom, window.gallery.pictures);
       window.gallery.pictures.addEventListener('click', showPopupImg);
+      window.gallery.pictures.addEventListener('keydown', keydownShowPopupImg);
     });
   });
 
@@ -49,6 +55,7 @@
         return b.comments.length - a.comments.length;
       });
       window.gallery.pictures.addEventListener('click', showPopupImg);
+      window.gallery.pictures.addEventListener('keydown', keydownShowPopupImg);
       window.gallery.renderElements(dataDiscussed, window.gallery.pictures);
     });
   });

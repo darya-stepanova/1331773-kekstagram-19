@@ -13,43 +13,51 @@
   var HEIGHT_COMMENTS_IMG = 35;
   var closeButton = picturePreviewContainer.querySelector('.big-picture__cancel');
   comments.innerHTML = '';
-  var createPopupImg = function (evt, picturesData) {
-    if (evt.target.classList.contains('picture__img')) {
-      var index = evt.target.getAttribute('data-id');
-      openPopupPicture();
-      countComments.classList.add('hidden');
-      loaderComments.classList.add('hidden');
-      srcPicturePreview.src = picturesData[index].url;
-      likes.textContent = picturesData[index].likes;
-      amountComments.textContent = picturesData[index].comments.length;
-      pictureDescription.textContent = picturesData[index].description;
-      for (var i = 0; i < picturesData[index].comments.length; i++) {
-        var itemComment = picturesData[index].comments[i];
-        var comment = document.createElement('li');
-        comment.classList.add('social__comment');
-        var commentText = document.createElement('p');
-        commentText.classList.add('social__text');
-        var commentImg = document.createElement('img');
-        commentImg.classList.add('social__picture');
-        commentImg.src = itemComment.avatar;
-        commentImg.alt = itemComment.name;
-        commentText.textContent = itemComment.message;
-        comments.appendChild(comment);
-        comment.appendChild(commentImg);
-        comment.appendChild(commentText);
-        commentImg.width = WIDTH_COMMENTS_IMG;
-        commentImg.height = HEIGHT_COMMENTS_IMG;
-      }
+  var openPopupImg = function (index, picturesData) {
+    openPopupPicture();
+    countComments.classList.add('hidden');
+    loaderComments.classList.add('hidden');
+    srcPicturePreview.src = picturesData[index].url;
+    likes.textContent = picturesData[index].likes;
+    amountComments.textContent = picturesData[index].comments.length;
+    pictureDescription.textContent = picturesData[index].description;
+    for (var i = 0; i < picturesData[index].comments.length; i++) {
+      var itemComment = picturesData[index].comments[i];
+      var comment = document.createElement('li');
+      comment.classList.add('social__comment');
+      var commentText = document.createElement('p');
+      commentText.classList.add('social__text');
+      var commentImg = document.createElement('img');
+      commentImg.classList.add('social__picture');
+      commentImg.src = itemComment.avatar;
+      commentImg.alt = itemComment.name;
+      commentText.textContent = itemComment.message;
+      comments.appendChild(comment);
+      comment.appendChild(commentImg);
+      comment.appendChild(commentText);
+      commentImg.width = WIDTH_COMMENTS_IMG;
+      commentImg.height = HEIGHT_COMMENTS_IMG;
     }
   };
-  window.gallery.pictures.addEventListener('keydown', function (evt) {
-    if (evt.key === 'Enter') {
-      showPopupImg();
+  var createPopupImg = function (evt, picturesData) {
+    if (evt.target.classList.contains('picture__img')) {
+      var indexId = evt.target.getAttribute('data-id');
+      openPopupImg(indexId, picturesData);
     }
-  });
+  };
+  var keydownCreatePopupImg = function (evt, picturesData) {
+    if (evt.key === 'Enter') {
+      var indexSrc = evt.srcElement.dataset.id;
+      openPopupImg(indexSrc, picturesData);
+    }
+  };
+  var keydownShowPopupImg = function (evt) {
+    keydownCreatePopupImg(evt, window.data.get());
+  };
   var showPopupImg = function (evt) {
     createPopupImg(evt, window.data.get());
   };
+  window.gallery.pictures.addEventListener('keydown', keydownShowPopupImg);
   window.gallery.pictures.addEventListener('click', showPopupImg);
   var openPopupPicture = function () {
     picturePreviewContainer.classList.remove('hidden');
@@ -69,6 +77,9 @@
   closeButton.addEventListener('click', closePopupPicture);
   window.preview = {
     showPopupImg: showPopupImg,
-    createPopupImg: createPopupImg
+    createPopupImg: createPopupImg,
+    openPopupImg: openPopupImg,
+    keydownShowPopupImg: keydownShowPopupImg,
+    keydownCreatePopupImg: keydownCreatePopupImg
   };
 })();
