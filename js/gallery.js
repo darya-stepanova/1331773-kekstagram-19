@@ -11,7 +11,6 @@
       pictureItem.querySelector('.picture__comments').textContent = data.comments.length;
       pictureItem.querySelector('.picture__likes').textContent = data.likes;
       pictureItem.querySelector('.picture__img').setAttribute('data-id', j);
-      pictureItem.querySelector('.picture__img').setAttribute('tabindex', 0);
       return pictureItem;
     };
     for (var j = 0; j < images.length; j++) {

@@ -47,7 +47,7 @@
   };
   var keydownCreatePopupImg = function (evt, picturesData) {
     if (evt.key === 'Enter') {
-      var indexSrc = evt.srcElement.dataset.id;
+      var indexSrc = evt.srcElement.children[0].dataset.id;
       openPopupImg(indexSrc, picturesData);
     }
   };
