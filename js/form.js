@@ -5,7 +5,7 @@
   var closeButtonPopupBody = popupBody.querySelector('.img-upload__cancel');
   var formUpload = document.querySelector('.img-upload__form');
   var hashtags = formUpload.querySelector('.text__hashtags');
-  var ESC_KEY = 'Escape';
+  window.ESC_KEY = 'Escape';
   var effectPin = formUpload.querySelector('.effect-level__pin');
   var effectValue = formUpload.querySelector('.effect-level__value');
   var imgUploadWrapper = formUpload.querySelector('.img-upload__preview');
@@ -14,8 +14,9 @@
   var effectPinDepth = formUpload.querySelector('.effect-level__depth');
   var effectLevel = formUpload.querySelector('.effect-level');
   effectLevel.style.display = 'none';
+  var commentsTextarea = formUpload.querySelector('.text__description');
   var popupBodyEscPressHandler = function (evt) {
-    if (hashtags !== document.activeElement && evt.key === ESC_KEY) {
+    if ((hashtags !== document.activeElement && commentsTextarea !== document.activeElement) && evt.key === window.ESC_KEY) {
       closePopupBody();
     }
   };
@@ -168,5 +169,10 @@
       checkLengthTotal(itemHashtags);
     }
     checkQuantity();
+  });
+  commentsTextarea.addEventListener('invalid', function () {
+    if (commentsTextarea.validity.tooLong) {
+      commentsTextarea.setCustomValidity('Длина комментария не может составлять больше 140 символов');
+    }
   });
 })();
