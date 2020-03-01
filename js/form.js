@@ -13,6 +13,9 @@
   var effectLevelLine = formUpload.querySelector('.effect-level__line');
   var effectPinDepth = formUpload.querySelector('.effect-level__depth');
   var effectLevel = formUpload.querySelector('.effect-level');
+  var controlInput = formUpload.querySelector('.scale__control--value');
+  var controlSmaller = formUpload.querySelector('.scale__control--smaller');
+  var controlBigger = formUpload.querySelector('.scale__control--bigger');
   effectLevel.style.display = 'none';
   var commentsTextarea = formUpload.querySelector('.text__description');
   var popupBodyEscPressHandler = function (evt) {
@@ -23,6 +26,7 @@
   var openPopupBody = function () {
     popupBody.classList.remove('hidden');
     document.addEventListener('keydown', popupBodyEscPressHandler);
+    controlInput.value = '100%';
   };
   var closePopupBody = function () {
     popupBody.classList.add('hidden');
@@ -31,6 +35,7 @@
     imgUpload.className = '';
     effectLevel.style.display = 'none';
     imgUpload.style.filter = '';
+    imgUploadWrapper.style.transform = '';
   };
 
   uploadFile.addEventListener('change', openPopupBody);
@@ -175,4 +180,21 @@
       commentsTextarea.setCustomValidity('Длина комментария не может составлять больше 140 символов');
     }
   });
+  var changeSize = function (valueChange, minValue, maxValue) {
+    var controlValue = controlInput.value;
+    var replaceControlValue = controlValue.replace(/[^0-9]/g, '');
+    if (replaceControlValue >= minValue && replaceControlValue <= maxValue) {
+      var controlValueChange = replaceControlValue - valueChange;
+      controlInput.value = controlValueChange + '%';
+      imgUploadWrapper.style.transform = 'scale(' + controlValueChange / 100 + ')';
+    }
+  };
+  var increaseSize = function () {
+    changeSize(-25, 0, 99);
+  };
+  var reduceSize = function () {
+    changeSize(25, 26, 100);
+  };
+  controlSmaller.addEventListener('click', reduceSize);
+  controlBigger.addEventListener('click', increaseSize);
 })();
