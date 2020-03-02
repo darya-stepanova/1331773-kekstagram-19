@@ -36,6 +36,9 @@
     effectLevel.style.display = 'none';
     imgUpload.style.filter = '';
     imgUploadWrapper.style.transform = '';
+    hashtags.value = '';
+    commentsTextarea.value = '';
+    formUpload.querySelector('#effect-none').checked = 'true';
   };
 
   uploadFile.addEventListener('change', openPopupBody);
@@ -120,7 +123,7 @@
   });
 
 
-  hashtags.addEventListener('change', function () {
+  hashtags.addEventListener('input', function () {
     var valueHashtags = hashtags.value;
     var arrHashtags = valueHashtags.split(' ');
     var pattern = /^[A-Za-zА-Яа-яЁё0-9_]+$/;
@@ -197,4 +200,8 @@
   };
   controlSmaller.addEventListener('click', reduceSize);
   controlBigger.addEventListener('click', increaseSize);
+  window.form = {
+    formUpload: formUpload,
+    closePopupBody: closePopupBody
+  };
 })();
