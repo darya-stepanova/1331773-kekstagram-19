@@ -36,6 +36,9 @@
     effectLevel.style.display = 'none';
     imgUpload.style.filter = '';
     imgUploadWrapper.style.transform = '';
+    hashtags.value = '';
+    commentsTextarea.value = '';
+    formUpload.querySelector('#effect-none').checked = 'true';
   };
 
   uploadFile.addEventListener('change', openPopupBody);
@@ -120,7 +123,7 @@
   });
 
 
-  hashtags.addEventListener('change', function () {
+  hashtags.addEventListener('input', function () {
     var valueHashtags = hashtags.value;
     var arrHashtags = valueHashtags.split(' ');
     var pattern = /^[A-Za-zА-Яа-яЁё0-9_]+$/;
@@ -197,4 +200,34 @@
   };
   controlSmaller.addEventListener('click', reduceSize);
   controlBigger.addEventListener('click', increaseSize);
+  var closePopupMessage = function (nameEvent) {
+    var closePopupMessageHandler = function () {
+      var nameEventContainer = document.querySelector('.' + nameEvent);
+      nameEventContainer.parentNode.removeChild(nameEventContainer);
+    };
+    document.querySelector('.' + nameEvent).addEventListener('click', closePopupMessageHandler);
+    document.addEventListener('keydown', function (evt) {
+      if (evt.key === window.ESC_KEY) {
+        closePopupMessageHandler();
+      }
+    });
+  };
+  var openSuccessMessage = function () {
+    closePopupBody();
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successMessage = successTemplate.cloneNode(true);
+    document.querySelector('main').appendChild(successMessage);
+    closePopupMessage('success');
+  };
+  var openErrorMessage = function () {
+    closePopupBody();
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorMessage = errorTemplate.cloneNode(true);
+    document.querySelector('main').appendChild(errorMessage);
+    closePopupMessage('error');
+  };
+  formUpload.addEventListener('submit', function (evt) {
+    window.upload(new FormData(formUpload), openSuccessMessage, openErrorMessage);
+    evt.preventDefault();
+  });
 })();
