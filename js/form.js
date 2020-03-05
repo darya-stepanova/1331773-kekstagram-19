@@ -200,8 +200,34 @@
   };
   controlSmaller.addEventListener('click', reduceSize);
   controlBigger.addEventListener('click', increaseSize);
-  window.form = {
-    formUpload: formUpload,
-    closePopupBody: closePopupBody
+  var closePopupMessage = function (nameEvent) {
+    var closePopupMessageHandler = function () {
+      var nameEventContainer = document.querySelector('.' + nameEvent);
+      nameEventContainer.parentNode.removeChild(nameEventContainer);
+    };
+    document.querySelector('.' + nameEvent).addEventListener('click', closePopupMessageHandler);
+    document.addEventListener('keydown', function (evt) {
+      if (evt.key === window.ESC_KEY) {
+        closePopupMessageHandler();
+      }
+    });
   };
+  var openSuccessMessage = function () {
+    closePopupBody();
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successMessage = successTemplate.cloneNode(true);
+    document.querySelector('main').appendChild(successMessage);
+    closePopupMessage('success');
+  };
+  var openErrorMessage = function () {
+    closePopupBody();
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorMessage = errorTemplate.cloneNode(true);
+    document.querySelector('main').appendChild(errorMessage);
+    closePopupMessage('error');
+  };
+  formUpload.addEventListener('submit', function (evt) {
+    window.upload(new FormData(formUpload), openSuccessMessage, openErrorMessage);
+    evt.preventDefault();
+  });
 })();
