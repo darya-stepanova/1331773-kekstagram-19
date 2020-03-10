@@ -34,12 +34,12 @@
     evt.preventDefault();
     filterChooseHandler(filterRandom);
     window.debounce(function () {
-      picturesData = window.data.get().slice();
+      picturesData = window.data.get();
       var dataRandom = picturesData.sort(function () {
         return 0.5 - Math.random();
       });
       window.gallery.remove();
-      window.gallery.renderElements(dataRandom, window.gallery.pictures);
+      window.gallery.renderElements(dataRandom.slice(0, 10), window.gallery.pictures);
       window.gallery.pictures.addEventListener('click', showPopupImg);
       window.gallery.pictures.addEventListener('keydown', keydownShowPopupImg);
     });

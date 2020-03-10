@@ -24,11 +24,14 @@
     }
   };
   var openPopupBody = function () {
+    document.querySelector('body').classList.add('modal-open');
     popupBody.classList.remove('hidden');
     document.addEventListener('keydown', popupBodyEscPressHandler);
     controlInput.value = '100%';
+    effectValue.value = '100';
   };
   var closePopupBody = function () {
+    document.querySelector('body').classList.remove('modal-open');
     popupBody.classList.add('hidden');
     document.removeEventListener('keydown', popupBodyEscPressHandler);
     uploadFile.value = '';
@@ -38,6 +41,7 @@
     imgUploadWrapper.style.transform = '';
     hashtags.value = '';
     commentsTextarea.value = '';
+    hashtags.style.border = ' ';
     formUpload.querySelector('#effect-none').checked = 'true';
   };
 
@@ -124,6 +128,11 @@
 
 
   hashtags.addEventListener('input', function () {
+    if (hashtags.validity.valid) {
+      hashtags.removeAttribute('style');
+    } else {
+      hashtags.style.border = '2px solid red';
+    }
     var valueHashtags = hashtags.value;
     var arrHashtags = valueHashtags.split(' ');
     var pattern = /^[A-Za-zА-Яа-яЁё0-9_]+$/;
@@ -182,6 +191,7 @@
     if (commentsTextarea.validity.tooLong) {
       commentsTextarea.setCustomValidity('Длина комментария не может составлять больше 140 символов');
     }
+    commentsTextarea.style.border = '2px solid red';
   });
   var changeSize = function (valueChange, minValue, maxValue) {
     var controlValue = controlInput.value;
