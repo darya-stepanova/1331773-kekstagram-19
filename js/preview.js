@@ -15,10 +15,8 @@
   var commentsLoaderButton = picturePreviewContainer.querySelector('.social__comments-loader');
   comments.innerHTML = '';
   var LENGTH_COMMENTS_LIMITED = 5;
-  var LENGTH_COMMENTS_INITIAL = 0;
-  var NEW_LENGTH_COMMENTS = 0;
-  var downloadComments = function (index, picturesData, i) {
-    var itemComment = picturesData[index].comments[i];
+  var counterClick = 0;
+  var renderComments = function (itemComment) {
     var comment = document.createElement('li');
     comment.classList.add('social__comment');
     var commentText = document.createElement('p');
@@ -46,10 +44,12 @@
     amountComments.textContent = picturesData[index].comments.length;
     pictureDescription.textContent = picturesData[index].description;
     for (var i = 0; i < LENGTH_COMMENTS_LIMITED; i++) {
-      downloadComments(index, picturesData, i);
+      if (i < picturesData[index].comments.length) {
+        renderComments(picturesData[index].comments[i]);
+      }
     }
     var uploadCommentsHandler = function () {
-      uploadComments(index, picturesData);
+      uploadComments(picturesData[index].comments);
     };
     var removeCommentsHandler = function () {
       commentsLoaderButton.removeEventListener('click', uploadCommentsHandler);
@@ -57,14 +57,12 @@
     commentsLoaderButton.addEventListener('click', uploadCommentsHandler);
     closeButton.addEventListener('click', removeCommentsHandler);
   };
-  var uploadComments = function (index, picturesData) {
-    LENGTH_COMMENTS_INITIAL += 5;
-    NEW_LENGTH_COMMENTS = LENGTH_COMMENTS_LIMITED += 5;
-    for (var b = 0; b < NEW_LENGTH_COMMENTS; b++) {
-      if (b >= LENGTH_COMMENTS_INITIAL) {
-        downloadComments(index, picturesData, b);
-      }
-      if (picturesData[index].comments.length <= NEW_LENGTH_COMMENTS) {
+  var uploadComments = function (commentsPicturesData) {
+    counterClick++;
+    var commentsData = commentsPicturesData.slice(LENGTH_COMMENTS_LIMITED * counterClick, LENGTH_COMMENTS_LIMITED * (counterClick + 1));
+    for (var b = 0; b < commentsData.length; b++) {
+      renderComments(commentsData[b]);
+      if (commentsPicturesData.length <= LENGTH_COMMENTS_LIMITED * (counterClick + 1)) {
         loaderComments.classList.add('hidden');
       }
     }
@@ -98,9 +96,7 @@
     picturePreviewContainer.classList.add('hidden');
     document.querySelector('body').classList.remove('modal-open');
     comments.innerHTML = '';
-    LENGTH_COMMENTS_LIMITED = 5;
-    LENGTH_COMMENTS_INITIAL = 0;
-    NEW_LENGTH_COMMENTS = 0;
+    counterClick = 0;
   };
   var popupPictureEscPressHandler = function (evt) {
     if (evt.key === window.ESC_KEY) {
