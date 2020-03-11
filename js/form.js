@@ -18,6 +18,7 @@
   var controlBigger = formUpload.querySelector('.scale__control--bigger');
   effectLevel.style.display = 'none';
   var commentsTextarea = formUpload.querySelector('.text__description');
+  var imgFilterValue = '';
   var popupBodyEscPressHandler = function (evt) {
     if ((hashtags !== document.activeElement && commentsTextarea !== document.activeElement) && evt.key === window.ESC_KEY) {
       closePopupBody();
@@ -76,20 +77,24 @@
         var inputChekedValue = effectInput.value;
       }
     }
-    if (inputChekedValue === 'sepia') {
-      var imgFilterValue = 'sepia(' + effectFilterValue + ')';
-    }
-    if (inputChekedValue === 'chrome') {
-      imgFilterValue = 'grayscale(' + effectFilterValue + ')';
-    }
-    if (inputChekedValue === 'marvin') {
-      imgFilterValue = 'invert(' + effectFilterValue * 100 + '%)';
-    }
-    if (inputChekedValue === 'phobos') {
-      imgFilterValue = 'blur(' + effectFilterValue * 3 + 'px)';
-    }
-    if (inputChekedValue === 'heat') {
-      imgFilterValue = 'brightness(' + effectFilterValue * 3 + ')';
+    switch (inputChekedValue) {
+      case 'sepia':
+        imgFilterValue = 'sepia(' + effectFilterValue + ')';
+        break;
+      case 'chrome':
+        imgFilterValue = 'grayscale(' + effectFilterValue + ')';
+        break;
+      case 'marvin':
+        imgFilterValue = 'invert(' + effectFilterValue * 100 + '%)';
+        break;
+      case 'phobos':
+        imgFilterValue = 'blur(' + effectFilterValue * 3 + 'px)';
+        break;
+      case 'heat':
+        imgFilterValue = 'brightness(' + effectFilterValue * 3 + ')';
+        break;
+      default:
+        imgFilterValue = ' ';
     }
     imgUpload.style.filter = imgFilterValue;
     return inputChekedValue;
