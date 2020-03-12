@@ -39,7 +39,7 @@
     imgUpload.className = '';
     effectLevel.style.display = 'none';
     imgUpload.style.filter = '';
-    imgUploadWrapper.style.transform = '';
+    imgUpload.style.transform = '';
     hashtags.value = '';
     commentsTextarea.value = '';
     hashtags.style.border = ' ';
@@ -112,14 +112,14 @@
       startCoords = {
         x: moveEvt.clientX
       };
-      var coordinatesPin = (effectPin.offsetLeft - shift.x);
+      var pinCoordinates = (effectPin.offsetLeft - shift.x);
       var widthEffectLevel = effectLevelLine.offsetWidth;
-      var effectFilterValue = coordinatesPin / widthEffectLevel;
+      var effectFilterValue = pinCoordinates / widthEffectLevel;
       effectValue.value = Math.round(effectFilterValue * 100);
       getValueFilter(effectFilterValue);
-      if (coordinatesPin > 0 && coordinatesPin <= widthEffectLevel) {
-        effectPinDepth.style.width = coordinatesPin + 'px';
-        effectPin.style.left = coordinatesPin + 'px';
+      if (pinCoordinates > 0 && pinCoordinates <= widthEffectLevel) {
+        effectPinDepth.style.width = pinCoordinates + 'px';
+        effectPin.style.left = pinCoordinates + 'px';
       }
     };
     var mouseUpHandler = function (upEvt) {
@@ -204,7 +204,7 @@
     if (replaceControlValue >= minValue && replaceControlValue <= maxValue) {
       var controlValueChange = replaceControlValue - valueChange;
       controlInput.value = controlValueChange + '%';
-      imgUploadWrapper.style.transform = 'scale(' + controlValueChange / 100 + ')';
+      imgUpload.style.transform = 'scale(' + controlValueChange / 100 + ')';
     }
   };
   var increaseSize = function () {
