@@ -1,11 +1,11 @@
 'use strict';
 (function () {
+  window.ESC_KEY = 'Escape';
   var uploadFile = document.getElementById('upload-file');
   var popupBody = document.querySelector('.img-upload__overlay');
   var closeButtonPopupBody = popupBody.querySelector('.img-upload__cancel');
   var formUpload = document.querySelector('.img-upload__form');
   var hashtags = formUpload.querySelector('.text__hashtags');
-  window.ESC_KEY = 'Escape';
   var effectPin = formUpload.querySelector('.effect-level__pin');
   var effectValue = formUpload.querySelector('.effect-level__value');
   var imgUploadWrapper = formUpload.querySelector('.img-upload__preview');
@@ -30,6 +30,8 @@
     document.addEventListener('keydown', popupBodyEscPressHandler);
     controlInput.value = '100%';
     effectValue.value = '100';
+    window.gallery.pictures.removeEventListener('keydown', window.preview.keydownShowPopupImg);
+    window.gallery.pictures.removeEventListener('keydown', window.filter.keydownShowPopupImgFilter);
   };
   var closePopupBody = function () {
     document.querySelector('body').classList.remove('modal-open');
@@ -42,10 +44,9 @@
     imgUpload.style.transform = '';
     hashtags.value = '';
     commentsTextarea.value = '';
-    hashtags.style.border = ' ';
+    hashtags.removeAttribute('style');
     formUpload.querySelector('#effect-none').checked = 'true';
   };
-
   uploadFile.addEventListener('change', openPopupBody);
   closeButtonPopupBody.addEventListener('click', closePopupBody);
   var changeEffect = function (effectName) {
@@ -70,11 +71,11 @@
   changeEffect('phobos');
   changeEffect('heat');
   var getValueFilter = function (effectFilterValue) {
-    var effectList = document.querySelectorAll('.effects__item');
-    for (var a = 0; a < effectList.length; a++) {
-      var effectInput = effectList[a].querySelector('.effects__radio');
-      if (effectInput.checked) {
-        var inputChekedValue = effectInput.value;
+    var effectInput = document.querySelectorAll('.effects__radio');
+    for (var a = 0; a < effectInput.length; a++) {
+      if (effectInput[a].checked) {
+        var inputChekedValue = effectInput[a].value;
+        break;
       }
     }
     switch (inputChekedValue) {
@@ -133,11 +134,6 @@
 
 
   hashtags.addEventListener('input', function () {
-    if (hashtags.validity.valid) {
-      hashtags.removeAttribute('style');
-    } else {
-      hashtags.style.border = '2px solid red';
-    }
     var valueHashtags = hashtags.value;
     var arrHashtags = valueHashtags.split(' ');
     var pattern = /^[A-Za-zА-Яа-яЁё0-9_]+$/;
@@ -181,16 +177,23 @@
         hashtags.setCustomValidity('нельзя указать больше пяти хэш-тегов;');
       }
     };
-    for (var i = 0; i < arrHashtags.length; i++) {
-      var itemHashtags = arrHashtags[i];
-      checkFirstLetter(itemHashtags);
-      checkSymbol(itemHashtags);
-      checkLengthItem(itemHashtags);
-      checkSeparation(itemHashtags);
-      checkRepeat(itemHashtags);
-      checkLengthTotal(itemHashtags);
+    if (valueHashtags !== '') {
+      for (var i = 0; i < arrHashtags.length; i++) {
+        var itemHashtags = arrHashtags[i];
+        checkFirstLetter(itemHashtags);
+        checkSymbol(itemHashtags);
+        checkLengthItem(itemHashtags);
+        checkSeparation(itemHashtags);
+        checkRepeat(itemHashtags);
+        checkLengthTotal(itemHashtags);
+      }
+      checkQuantity();
     }
-    checkQuantity();
+    if (hashtags.validity.valid) {
+      hashtags.removeAttribute('style');
+    } else {
+      hashtags.style.border = '2px solid red';
+    }
   });
   commentsTextarea.addEventListener('invalid', function () {
     if (commentsTextarea.validity.tooLong) {
@@ -215,34 +218,44 @@
   };
   controlSmaller.addEventListener('click', reduceSize);
   controlBigger.addEventListener('click', increaseSize);
-  var closePopupMessage = function (nameEvent) {
-    var closePopupMessageHandler = function () {
-      var nameEventContainer = document.querySelector('.' + nameEvent);
-      nameEventContainer.parentNode.removeChild(nameEventContainer);
-    };
-    document.querySelector('.' + nameEvent).addEventListener('click', closePopupMessageHandler);
-    document.addEventListener('keydown', function (evt) {
-      if (evt.key === window.ESC_KEY) {
-        closePopupMessageHandler();
-      }
-    });
+  var closeSuccesMessageHandler = function () {
+    var nameSuccesContainer = document.querySelector('.success');
+    nameSuccesContainer.parentNode.removeChild(nameSuccesContainer);
+    document.removeEventListener('keydown', keydownCloseSuccesMessageHandler);
+  };
+  var closeErrorMessageHandler = function () {
+    var nameErrorContainer = document.querySelector('.error');
+    nameErrorContainer.parentNode.removeChild(nameErrorContainer);
+    document.removeEventListener('keydown', keydownCloseErrorMessageHandler);
+  };
+  var keydownCloseSuccesMessageHandler = function (evt) {
+    if (evt.key === window.ESC_KEY) {
+      closeSuccesMessageHandler();
+    }
+  };
+  var keydownCloseErrorMessageHandler = function (evt) {
+    if (evt.key === window.ESC_KEY) {
+      closeErrorMessageHandler();
+    }
   };
   var openSuccessMessage = function () {
     closePopupBody();
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var successMessage = successTemplate.cloneNode(true);
     document.querySelector('main').appendChild(successMessage);
-    closePopupMessage('success');
+    document.querySelector('.success').addEventListener('click', closeSuccesMessageHandler);
+    document.addEventListener('keydown', keydownCloseSuccesMessageHandler);
   };
   var openErrorMessage = function () {
     closePopupBody();
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorMessage = errorTemplate.cloneNode(true);
     document.querySelector('main').appendChild(errorMessage);
-    closePopupMessage('error');
+    document.querySelector('.error').addEventListener('click', closeErrorMessageHandler);
+    document.addEventListener('keydown', keydownCloseErrorMessageHandler);
   };
   formUpload.addEventListener('submit', function (evt) {
-    window.upload(new FormData(formUpload), openSuccessMessage, openErrorMessage);
+    window.network.upload(new FormData(formUpload), openSuccessMessage, openErrorMessage);
     evt.preventDefault();
   });
 })();

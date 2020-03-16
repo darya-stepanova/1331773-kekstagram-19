@@ -22,21 +22,21 @@
   };
   var successHandler = function (images) {
     renderElements(images, pictures);
-    window.showFilter();
+    window.filter.showFilter();
     window.data.save(images);
   };
   var errorHandler = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: #B22222;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '20px';
-    node.style.padding = '10px';
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
+    var containerError = document.createElement('div');
+    containerError.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: #B22222;';
+    containerError.style.position = 'absolute';
+    containerError.style.left = 0;
+    containerError.style.right = 0;
+    containerError.style.fontSize = '20px';
+    containerError.style.padding = '10px';
+    containerError.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', containerError);
   };
-  window.load(successHandler, errorHandler);
+  window.network.load(successHandler, errorHandler);
   var removePicturesItem = function () {
     var picturesItem = pictures.querySelectorAll('.picture');
     picturesItem.forEach(function (currentItem) {

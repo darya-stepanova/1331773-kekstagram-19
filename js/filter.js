@@ -5,13 +5,13 @@
   var filterRandom = filter.querySelector('#filter-random');
   var filterDiscussed = filter.querySelector('#filter-discussed');
   var picturesData;
-  window.showFilter = function () {
+  var showFilter = function () {
     filter.classList.remove('img-filters--inactive');
   };
   var showPopupImg = function (evt) {
     window.preview.createPopupImg(evt, picturesData);
   };
-  var keydownShowPopupImg = function (evt) {
+  var keydownShowPopupImgFilter = function (evt) {
     window.preview.keydownCreatePopupImg(evt, picturesData);
   };
   var filterChooseHandler = function (filterName) {
@@ -27,21 +27,21 @@
     window.gallery.remove();
     window.gallery.renderElements(picturesData, window.gallery.pictures);
     window.gallery.pictures.addEventListener('click', showPopupImg);
-    window.gallery.pictures.addEventListener('keydown', keydownShowPopupImg);
+    window.gallery.pictures.addEventListener('keydown', keydownShowPopupImgFilter);
   });
 
   filterRandom.addEventListener('click', function (evt) {
     evt.preventDefault();
     filterChooseHandler(filterRandom);
     window.debounce(function () {
-      picturesData = window.data.get();
+      picturesData = window.data.get().slice();
       var dataRandom = picturesData.sort(function () {
         return 0.5 - Math.random();
       });
       window.gallery.remove();
       window.gallery.renderElements(dataRandom.slice(0, 10), window.gallery.pictures);
       window.gallery.pictures.addEventListener('click', showPopupImg);
-      window.gallery.pictures.addEventListener('keydown', keydownShowPopupImg);
+      window.gallery.pictures.addEventListener('keydown', keydownShowPopupImgFilter);
     });
   });
 
@@ -55,8 +55,12 @@
         return b.comments.length - a.comments.length;
       });
       window.gallery.pictures.addEventListener('click', showPopupImg);
-      window.gallery.pictures.addEventListener('keydown', keydownShowPopupImg);
+      window.gallery.pictures.addEventListener('keydown', keydownShowPopupImgFilter);
       window.gallery.renderElements(dataDiscussed, window.gallery.pictures);
     });
   });
+  window.filter = {
+    keydownShowPopupImgFilter: keydownShowPopupImgFilter,
+    showFilter: showFilter
+  };
 })();
